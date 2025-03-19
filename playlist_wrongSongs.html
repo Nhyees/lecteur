@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            max-width: 1200px;
+            width: 90%;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            padding: 20px;
+            height: 80vh
+        }
+        .music-list {
+            width: 70%;
+            max-height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+            background: #222;
+            border-radius: 10px;
+        }
+        .music-item {
+            padding: 15px;
+            border-bottom: 1px solid #555;
+            cursor: grab;
+            position: relative;
+            transition: background 0.3s;
+            border-radius: 5px;
+        }
+        .music-item.active {
+            background-color: hsl(300, 34%, 33%);
+            font-weight: bold;
+        }
+        .delete-button {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: rgb(236, 204, 204);
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .player-container {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn {
+            background: hsl(300, 34%, 33%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: hsl(300, 34%, 33%);
+        }
+        .song-info-container {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        #songInfo {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+            max-height: 300px;
+            position: relative;
+        }
+        #songInfo.hidden {
+            max-height: 0;
+            padding: 0;
+            margin-top: 0;
+        }
+        #songInfo::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #222;
+            z-index: 1;
+        }
+        #songInfo p {
+            position: relative;
+            z-index: 2;
+        }
+
+        video {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain; 
+        }
+
+        /* Bouton "Supprimer" en bas à droite */
+        .clear-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            font-size: 20px;
+            background-color: #F44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .clear-button:hover {
+            background-color: #D32F2F;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="music-list" id="musicList">
+            
+            <input type="file" id="fileInput" accept=".json">
+            <button id="exportButton" class="btn">💾 Exporter JSON</button>
+            <h2>Liste des chansons</h2>
+        </div>
+        <div class="player-container">
+
+            <video id="videoPlayer" controls></video>
+            <audio id="audioPlayer" controls style="display: none;"></audio>
+
+            <div class="controls">
+                <button id="prevButton" class="btn">⏮</button>
+                <button id="randomButton" class="btn">🔀</button>
+                <button id="nextButton" class="btn">⏭</button>
+            </div>
+
+            <div class="song-info-container">
+                <div id="songInfo">
+                    <p><strong>Anime :</strong> <span id="animeName"></span></p>
+                    <p><strong>Titre :</strong> <span id="songName"></span></p>
+                    <p><strong>Artiste :</strong> <span id="artistName"></span></p>
+                    <p><strong>Type :</strong> <span id="typeName"></span></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <button id="clearButton" class="clear-button">🔄</button>
+
+    <script>
+        let musicData = [];
+        let currentIndex = 0;
+        let savedVolume = 0.3;
+        let isShuffle = false;
+
+        const audioPlayer = document.getElementById("audioPlayer");
+        const musicList = document.getElementById("musicList");
+
+        //--Charger les données----------
+        function loadPlaylist() {
+            const savedPlaylist = localStorage.getItem("playlist");
+            if (savedPlaylist) {
+                musicData = JSON.parse(savedPlaylist);
+            }
+            displayMusicList();
+        }
+
+        window.onload = loadPlaylist;
+        //-------------------------------
+
+        audioPlayer.addEventListener("volumechange", function() {
+            savedVolume = audioPlayer.volume; 
+        });
+
+        document.getElementById("fileInput").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const newMusicData = JSON.parse(e.target.result);
+                        musicData = musicData.concat(newMusicData); // Ajoute les nouvelles chansons à la liste existante
+                        displayMusicList();
+                    } catch (error) {
+                        alert("Erreur lors du chargement du fichier JSON");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+
+        function displayMusicList() {
+            musicList.innerHTML = '<input type="file" id="fileInput" accept=".json"><button id="exportButton" class="btn">💾 Exporter JSON</button><h2>Liste des chansons</h2>';
+
+            document.getElementById("fileInput").addEventListener("change", handleFileUpload);
+            document.getElementById("exportButton").addEventListener("click", exportPlaylist);
+
+            musicData.forEach((music, index) => {
+                const musicItem = document.createElement("div");
+                musicItem.classList.add("music-item");
+                musicItem.draggable = true;
+                musicItem.dataset.index = index;
+                musicItem.innerHTML = `
+                    <h3>${music.songName} - ${music.artist}</h3>
+                    <p><strong>Anime:</strong> ${music.animeJPName} | <strong>Type:</strong> ${music.type}</p>
+                    <button class="delete-button" onclick="deleteMusic(${index})">❌</button>
+                `;
+
+                musicItem.addEventListener("dragstart", dragStart);
+                musicItem.addEventListener("dragover", dragOver);
+                musicItem.addEventListener("drop", drop);
+
+                musicItem.addEventListener("click", function() {
+                    playMusic(index);
+                });
+
+                musicList.appendChild(musicItem);
+            });
+
+            document.getElementById("exportButton").addEventListener("click", exportPlaylist);
+            highlightCurrentSong();
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const newMusicData = JSON.parse(e.target.result);
+                        musicData = musicData.concat(newMusicData); // Ajoute les nouvelles chansons
+
+                        localStorage.setItem("playlist", JSON.stringify(musicData));
+
+                        displayMusicList();
+                    } catch (error) {
+                        alert("Erreur lors du chargement du fichier JSON");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+
+        function dragStart(event) {
+            event.dataTransfer.setData("text/plain", event.target.dataset.index);
+        }
+
+        function dragOver(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const fromIndex = event.dataTransfer.getData("text/plain");
+            const toIndex = event.target.dataset.index;
+            
+            if (fromIndex !== undefined && toIndex !== undefined) {
+                const movedItem = musicData.splice(fromIndex, 1)[0];
+                musicData.splice(toIndex, 0, movedItem);
+
+                localStorage.setItem("playlist", JSON.stringify(musicData)); // Sauvegarde
+                displayMusicList();
+            }
+        }
+
+        const videoPlayer = document.getElementById("videoPlayer");
+
+        function playMusic(index) {
+            if (musicData.length === 0) return;
+            currentIndex = index;
+
+            videoPlayer.src = musicData[currentIndex].video;
+            audioPlayer.volume = savedVolume;
+            videoPlayer.play();
+            updateSongInfo();
+            highlightCurrentSong();
+
+        }
+
+
+        function updateSongInfo() {
+            const song = musicData[currentIndex];
+            document.getElementById("songName").textContent = song.songName;
+            document.getElementById("artistName").textContent = song.artist;
+            document.getElementById("animeName").textContent = song.animeJPName;
+            document.getElementById("typeName").textContent = song.type;
+        }
+
+        function highlightCurrentSong() {
+            const items = document.querySelectorAll(".music-item");
+            items.forEach((item, index) => {
+                item.classList.toggle("active", index == currentIndex);
+            });
+        }
+
+        document.getElementById("prevButton").addEventListener("click", playPrevious);
+        document.getElementById("nextButton").addEventListener("click", playNext);
+        
+        document.getElementById("randomButton").addEventListener("click", function () {
+            isShuffle = !isShuffle;
+            this.style.background = isShuffle ? "hsl(300, 50%, 40%)" : "hsl(300, 34%, 33%)"; // Change la couleur pour indiquer si activé
+        });
+
+        audioPlayer.addEventListener("ended", function () {
+            if (isShuffle) {
+                playRandomMusic();
+            } else {
+                playNext();
+            }
+        });
+
+        function playRandomMusic() {
+            if (musicData.length === 0) return;
+            const randomIndex = Math.floor(Math.random() * musicData.length);
+            playMusic(randomIndex);
+        }
+
+        function playPrevious() {
+            if (musicData.length === 0) return;
+            currentIndex = (currentIndex - 1 + musicData.length) % musicData.length;
+            playMusic(currentIndex);
+        }
+
+        function playNext() {
+            if (musicData.length === 0) return;
+            if (isShuffle) {
+                playRandomMusic();
+            } else {
+                currentIndex = (currentIndex + 1) % musicData.length;
+                playMusic(currentIndex);
+            }
+        }
+
+
+        function deleteMusic(index) {
+            musicData.splice(index, 1);
+            
+            localStorage.setItem("playlist", JSON.stringify(musicData)); // Sauvegarde
+            displayMusicList();
+        }
+
+
+        function exportPlaylist() {
+            const json = JSON.stringify(musicData, null, 2);
+            const blob = new Blob([json], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "playlist.json";
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        videoPlayer.addEventListener("ended", function() {
+            playNext();
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedPlaylist = localStorage.getItem("playlist");
+            if (savedPlaylist) {
+                musicData = JSON.parse(savedPlaylist);
+                displayMusicList();
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const clearButton = document.getElementById("clearButton");
+
+            if (clearButton) {
+                clearButton.addEventListener("click", function() {
+                    // Supprimer toutes les musiques de la liste
+                    musicData = [];
+                    localStorage.removeItem("playlist");
+                    clearAllMusic();
+                    displayMusicList(); // Mettre à jour l'affichage
+                });
+            }
+        });
+
+        function clearAllMusic() {
+            const playlist = document.getElementById("playlist");
+
+            if (playlist) {
+                // Vider toutes les musiques dans la playlist
+                playlist.innerHTML = "";
+                console.log("Toutes les musiques ont été supprimées !");
+            } else {
+                console.log("Erreur : Conteneur de la playlist introuvable");
+            }
+        }
+
+
+    </script>
+</body>
+</html>
