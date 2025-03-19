@@ -70,7 +70,7 @@
         }
 
         .btn {
-            background: #f90;
+            background: hsl(300, 34%, 33%);
             color: white;
             border: none;
             padding: 10px;
@@ -101,7 +101,7 @@
 <body>
     <div class="container">
         <div class="music-list" id="musicList">
-            <h2>Playlist</h2>
+            <h2>Songlist</h2>
             <input type="file" id="fileInput" accept=".json">
             <button id="exportButton" class="btn">💾</button>
         </div>
@@ -109,7 +109,7 @@
         <audio id="audioPlayer" controls></audio>
         <video id="videoPlayer" controls style="display:none; width: 100%;"></video>
         <button id="prevButton" class="btn">⏮ Précédent</button>
-        <button id="randomButton" class="btn">🔀 Aléatoire</button>
+        <button id="randomButton" class="btn">🔀</button>
         <button id="nextButton" class="btn">⏭ Suivant</button>
 
         <div id="songInfo">
@@ -162,7 +162,7 @@
 
         function displayMusicList() {
 
-            musicList.innerHTML = '<h2>Playlist</h2><input type="file" id="fileInput" accept=".json"><button id="exportButton" class="btn">💾</button>';
+            musicList.innerHTML = '<h2>Songlist</h2><input type="file" id="fileInput" accept=".json"><button id="exportButton" class="btn">💾</button>';
 
             document.getElementById("fileInput").addEventListener("change", handleFileUpload);
             document.getElementById("exportButton").addEventListener("click", exportPlaylist);
