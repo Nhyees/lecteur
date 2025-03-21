@@ -39,7 +39,6 @@ document.getElementById("fileInput").addEventListener("change", function(event) 
     }
 });
 
-
 function displayMusicList() {
     musicList.innerHTML = '<input type="file" id="fileInput" accept=".json"><button id="exportButton" class="btn">💾</button><h2>Liste des chansons</h2>';
 
