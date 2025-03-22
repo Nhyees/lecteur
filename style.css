@@ -9,7 +9,7 @@ body {
 }
 .container {
     display: flex;
-    max-width: 1300px;
+    max-width: 70vw;
     width: 90%;
     background: #333;
     border-radius: 10px;
