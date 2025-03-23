@@ -273,7 +273,7 @@ video {
 #game-toggle-btn {
     position: fixed;
     top: 100px;
-    left: 10px;
+    left: 10px !important;
     background-color: #ff6b81;
     color: white;
     border: none;
