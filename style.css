@@ -220,3 +220,7 @@ video {
 .score-display {
     display: none;
 }
+
+#game-toggle-btn {
+    display: none;
+}

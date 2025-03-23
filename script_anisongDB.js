@@ -272,3 +272,71 @@ function toggleTheme() {
         themeLink.setAttribute("href", "style.css"); 
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    let score = 0;
+    let gameActive = false;
+
+    // Créer le bouton pour activer/désactiver le jeu
+    const toggleButton = document.createElement("button");
+    toggleButton.id = "game-toggle-btn";
+    toggleButton.textContent = "🎮";
+    document.body.appendChild(toggleButton);
+
+    const scoreDisplay = document.createElement("div");
+    scoreDisplay.classList.add("score-display");
+    scoreDisplay.textContent = "Score: 0";
+    document.body.appendChild(scoreDisplay);
+
+    // Masquer le score au début
+    scoreDisplay.style.display = "none";
+
+    function createCircle() {
+        const circle = document.createElement("div");
+        circle.classList.add("circle");
+
+        const size = Math.random() * 40 + 30;
+        const x = Math.random() * (window.innerWidth - size);
+        const y = Math.random() * (window.innerHeight - size);
+
+        circle.style.width = `${size}px`;
+        circle.style.height = `${size}px`;
+        circle.style.left = `${x}px`;
+        circle.style.top = `${y}px`;
+
+        document.body.appendChild(circle);
+
+        circle.addEventListener("click", () => {
+            score++;
+            scoreDisplay.textContent = `Score: ${score}`;
+            circle.remove();
+        });
+
+        setTimeout(() => {
+            if (circle.parentNode) {
+                circle.remove();
+            }
+        }, 1000);
+    }
+
+    let circleInterval;
+
+    // Fonction pour activer/désactiver le jeu
+    function toggleGame() {
+        if (gameActive) {
+            clearInterval(circleInterval);
+            scoreDisplay.style.display = "none";
+            toggleButton.textContent = "🎮";
+            gameActive = false;
+        } else {
+            score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
+            scoreDisplay.style.display = "block";
+            circleInterval = setInterval(createCircle, 800);
+            toggleButton.textContent = "Arrêter le jeu";
+            gameActive = true;
+        }
+    }
+
+    toggleButton.addEventListener("click", toggleGame);
+});
