@@ -198,8 +198,8 @@ video {
 .floating-image {
     position: fixed;
     bottom: 00px;
-    left: -5px;
-    width: clamp(150px, 17vw, 300px);
+    left: -8px;
+    width: clamp(150px, 16vw, 300px);
     height: auto;
     z-index: 9999;
 }
