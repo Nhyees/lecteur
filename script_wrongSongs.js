@@ -312,7 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (gameActive) {
             clearInterval(circleInterval);
             scoreDisplay.style.display = "none";
-            toggleButton.textContent = "Démarrer le jeu";
+            toggleButton.textContent = "🎮";
             gameActive = false;
         } else {
             score = 0;
