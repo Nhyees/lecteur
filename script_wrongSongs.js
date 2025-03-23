@@ -15,7 +15,14 @@ function loadPlaylist() {
     displayMusicList();
 }
 
-window.onload = loadPlaylist;
+window.onload = function() {
+    loadPlaylist();
+    videoPlayer.volume = savedVolume;
+
+    if (musicData.length > 0) {
+        playMusic(0);
+    }
+}
 //-------------------------------
 
 audioPlayer.addEventListener("volumechange", function() {
@@ -91,7 +98,6 @@ function handleFileUpload(event) {
     }
 }
 
-
 function dragStart(event) {
     event.dataTransfer.setData("text/plain", event.target.dataset.index);
 }
@@ -149,7 +155,12 @@ document.getElementById("nextButton").addEventListener("click", playNext);
 
 document.getElementById("randomButton").addEventListener("click", function () {
     isShuffle = !isShuffle;
-    this.style.background = isShuffle ? "hsl(300, 50%, 40%)" : "hsl(300, 34%, 33%)";
+
+    if (isShuffle) {
+        this.classList.add("active"); 
+    } else {
+        this.classList.remove("active");
+    }
 });
 
 audioPlayer.addEventListener("ended", function () {
@@ -237,5 +248,15 @@ function clearAllMusic() {
         console.log("Toutes les musiques ont été supprimées !");
     } else {
         console.log("Erreur : Conteneur de la playlist introuvable");
+    }
+}
+
+function toggleTheme() {
+    const themeLink = document.getElementById("theme-link");
+
+    if (themeLink.getAttribute("href") === "style.css") {
+        themeLink.setAttribute("href", "style_girly.css"); 
+    } else {
+        themeLink.setAttribute("href", "style.css"); 
     }
 }

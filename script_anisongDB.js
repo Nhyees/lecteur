@@ -15,7 +15,14 @@ function loadPlaylist() {
     displayMusicList();
 }
 
-window.onload = loadPlaylist;
+window.onload = function() {
+    loadPlaylist();
+    videoPlayer.volume = savedVolume;
+
+    if (musicData.length > 0) {
+        playMusic(0);
+    }
+}
 //-------------------------------
 
 audioPlayer.addEventListener("volumechange", function() {
@@ -125,15 +132,15 @@ function playMusic(index) {
     if (videoUrl) {
         // Ajouter la base URL "https://eudist.animemusicquiz.com/" avant l'URL de la vidéo
         videoPlayer.src = "https://eudist.animemusicquiz.com/" + videoUrl;
-        videoPlayer.style.display = 'block';  // Afficher la vidéo
-        audioPlayer.style.display = 'none';  // Masquer l'audio
+        videoPlayer.style.display = 'block';
+        audioPlayer.style.display = 'none';
         videoPlayer.play();
         
     } else {
         // Si aucune vidéo n'est disponible, lire l'audio
         audioPlayer.src = "https://eudist.animemusicquiz.com/" + musicData[currentIndex].audio;
-        audioPlayer.style.display = 'block';  // Afficher l'audio
-        videoPlayer.style.display = 'none';  // Masquer la vidéo
+        audioPlayer.style.display = 'block';
+        videoPlayer.style.display = 'none';
         audioPlayer.play();
     }
 
@@ -142,8 +149,6 @@ function playMusic(index) {
     updateSongInfo();
     highlightCurrentSong();
 }
-
-
 
 function updateSongInfo() {
     const song = musicData[currentIndex];
@@ -165,7 +170,12 @@ document.getElementById("nextButton").addEventListener("click", playNext);
 
 document.getElementById("randomButton").addEventListener("click", function () {
     isShuffle = !isShuffle;
-    this.style.background = isShuffle ? "hsl(300, 50%, 40%)" : "hsl(300, 34%, 33%)";
+    
+    if (isShuffle) {
+        this.classList.add("active"); 
+    } else {
+        this.classList.remove("active");
+    }
 });
 
 audioPlayer.addEventListener("ended", function () {
@@ -198,14 +208,12 @@ function playNext() {
     }
 }
 
-
 function deleteMusic(index) {
     musicData.splice(index, 1);
     
     localStorage.setItem("playlist", JSON.stringify(musicData)); // Sauvegarde
     displayMusicList();
 }
-
 
 function exportPlaylist() {
     const json = JSON.stringify(musicData, null, 2);
@@ -253,5 +261,15 @@ function clearAllMusic() {
         console.log("Toutes les musiques ont été supprimées !");
     } else {
         console.log("Erreur : Conteneur de la playlist introuvable");
+    }
+}
+
+function toggleTheme() {
+    const themeLink = document.getElementById("theme-link");
+
+    if (themeLink.getAttribute("href") === "style.css") {
+        themeLink.setAttribute("href", "style_girly.css"); 
+    } else {
+        themeLink.setAttribute("href", "style.css"); 
     }
 }
