@@ -158,6 +158,7 @@ video {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 .clear-button:hover {
@@ -176,6 +177,7 @@ video {
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
+    transition: 0.3s;
 }
 
 .theme-toggle-btn:hover {
