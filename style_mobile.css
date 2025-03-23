@@ -73,7 +73,7 @@ audio {
 }
 
 .btn:hover {
-    background: hsl(300, 35%, 28%);
+    background: hsl(300, 34%, 33%);
 }
 
 #player {
@@ -99,7 +99,6 @@ audio {
     border: none;
     border-radius: 2px;
     cursor: pointer;
-    
 }
 
 .clear-button:hover {
