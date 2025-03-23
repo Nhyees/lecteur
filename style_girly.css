@@ -200,3 +200,21 @@ video {
     height: auto;
     z-index: 9999;
 }
+
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff6b81;
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.back-button:hover {
+    background-color: #db4a60;
+}
