@@ -193,14 +193,12 @@ function playNext() {
     }
 }
 
-
 function deleteMusic(index) {
     musicData.splice(index, 1);
     
     localStorage.setItem("playlist", JSON.stringify(musicData)); // Sauvegarde
     displayMusicList();
 }
-
 
 function exportPlaylist() {
     const json = JSON.stringify(musicData, null, 2);
