@@ -282,6 +282,7 @@ video {
     cursor: pointer;
     border-radius: 5px;
     z-index: 9999;
+    transition: 0.3s;
 }
 
 #game-toggle-btn:hover {
