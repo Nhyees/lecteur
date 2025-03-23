@@ -9,7 +9,7 @@ body {
     transition: background-color 0.6s ease, color 0.6s ease;
 
     scrollbar-width: thin; /* Pour Firefox */
-    scrollbar-color: rgb(255, 255, 255) rgba(0, 0, 0, 0.1);
+    scrollbar-color: rgb(141, 61, 101) rgba(0, 0, 0, 0.1);
 }
 
 /*------------scrollbar---------------------------------------------------------------------------------*/
@@ -18,7 +18,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgb(245, 209, 215);
+    background: rgb(141, 61, 101);
     border-radius: 10px;
     transition: opacity 0.3s;
 }
@@ -191,7 +191,7 @@ video {
     right: 20px;
     padding: 10px 15px;
     font-size: 20px;
-    background-color: #ff6b81;
+    background-color: #db4a60;
     color: white;
     border: none;
     border-radius: 10px;
@@ -201,7 +201,7 @@ video {
 }
 
 .clear-button:hover {
-    background-color: #ff3b5a;
+    background-color: #fff0f5;
 }
 
 .theme-toggle-btn {
@@ -209,7 +209,7 @@ video {
     font-size: 22px;
     top: 20px;
     right: 20px;
-    background-color: #ff6b81;
+    background-color: #db4a60;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -220,7 +220,7 @@ video {
 }
 
 .theme-toggle-btn:hover {
-    background-color: #db4a60;
+    background-color: #fff0f5;
 }
 
 .floating-image {
