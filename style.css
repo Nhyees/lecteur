@@ -135,7 +135,7 @@ audio {
 }
 
 #songInfo {
-    background-color: #333;
+    background-color: #222;
     color: #fff;
     padding: 15px;
     border-radius: 10px;
@@ -144,28 +144,6 @@ audio {
     max-height: 300px;
     position: relative;
     font-size: 1.2rem;
-}
-
-#songInfo.hidden {
-    max-height: 0;
-    padding: 0;
-    margin-top: 0;
-}
-
-#songInfo::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #222;
-    z-index: 1;
-}
-
-#songInfo p {
-    position: relative;
-    z-index: 2;
 }
 
 video {
@@ -233,4 +211,12 @@ video {
 
 .back-button:hover {
     background-color: #555;
+}
+
+.circle {
+    display: none;
+}
+
+.score-display {
+    display: none;
 }

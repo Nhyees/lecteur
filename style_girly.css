@@ -249,3 +249,23 @@ video {
 .back-button:hover {
     background-color: #db4a60;
 }
+
+.circle {
+    position: absolute;
+    background-color: #db4a60;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #b12e42;
+    cursor: pointer;
+}
+
+.score-display {
+    position: fixed;
+    top: 120px;
+    left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 5px;
+}
