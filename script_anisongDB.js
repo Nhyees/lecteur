@@ -340,3 +340,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     toggleButton.addEventListener("click", toggleGame);
 });
+
+// Remplacement de l'émoji si nécessaire
+document.addEventListener("DOMContentLoaded", function() {
+    const testEmoji = document.createElement("span");
+    testEmoji.textContent = "🫧";
+    document.body.appendChild(testEmoji);
+
+    const isSupported = testEmoji.offsetWidth > 0 && testEmoji.offsetHeight > 0;
+    testEmoji.remove();
+
+    const emojiElements = document.querySelectorAll(".emoji");
+    emojiElements.forEach(el => {
+        if (!isSupported) {
+            el.textContent = "✨";
+        }
+    });
+});
