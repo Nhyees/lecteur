@@ -263,15 +263,30 @@ function clearAllMusic() {
     }
 }
 
+/*theme--------------------------------------------------------------*/
+
 function toggleTheme() {
     const themeLink = document.getElementById("theme-link");
 
     if (themeLink.getAttribute("href") === "style.css") {
-        themeLink.setAttribute("href", "style_girly.css"); 
+        themeLink.setAttribute("href", "style_girly.css");
+        localStorage.setItem("selectedTheme", "style_girly.css");
     } else {
-        themeLink.setAttribute("href", "style.css"); 
+        themeLink.setAttribute("href", "style.css");
+        localStorage.setItem("selectedTheme", "style.css");
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const themeLink = document.getElementById("theme-link");
+    const savedTheme = localStorage.getItem("selectedTheme");
+
+    if (savedTheme) {
+        themeLink.setAttribute("href", savedTheme);
+    }
+});
+
+/*-------------------------------------------------------------------*/
 
 document.addEventListener("DOMContentLoaded", () => {
     let score = 0;
