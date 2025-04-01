@@ -60,8 +60,18 @@ function displayMusicList() {
         musicItem.innerHTML = `
             <h3>${music.songName} - ${music.artist}</h3>
             <p><strong>Anime:</strong> ${music.animeJPName} | <strong>Type:</strong> ${music.type}</p>
-            <button class="delete-button" onclick="deleteMusic(${index})">❌</button>
         `;
+
+        //--Bouton supprimer chaque élément-----------------------------------------------
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("delete-button");
+        deleteButton.innerHTML = "❌";
+        deleteButton.addEventListener("click", function(event) {
+            event.stopPropagation();
+            deleteMusic(index);
+        });
+        musicItem.appendChild(deleteButton);
+        //--------------------------------------------------------------------------------
 
         musicItem.addEventListener("dragstart", dragStart);
         musicItem.addEventListener("dragover", dragOver);
@@ -194,9 +204,24 @@ function playNext() {
 }
 
 function deleteMusic(index) {
+    const isCurrentPlaying = index === currentIndex;
+
     musicData.splice(index, 1);
-    
     localStorage.setItem("playlist", JSON.stringify(musicData)); // Sauvegarde
+
+    if (musicData.length === 0) {
+        currentIndex = 0;
+        videoPlayer.pause();
+        videoPlayer.src = "";
+    } else {
+        if (isCurrentPlaying) {
+            currentIndex = Math.min(index, musicData.length - 1);
+            playMusic(currentIndex);
+        } else if (index < currentIndex) {
+            currentIndex--;
+        }
+    }
+
     displayMusicList();
 }
 
@@ -249,7 +274,7 @@ function clearAllMusic() {
     }
 }
 
-/*theme--------------------------------------------------------------*/
+//--Changer thème--------------------------------------------------------------
 
 function toggleTheme() {
     const themeLink = document.getElementById("theme-link");
@@ -272,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-/*-------------------------------------------------------------------*/
+//-----------------------------------------------------------------------------
 
 document.addEventListener("DOMContentLoaded", () => {
     let score = 0;
