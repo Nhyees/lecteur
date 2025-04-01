@@ -294,8 +294,8 @@ function toggleTheme() {
     } else {
         themeLink.setAttribute("href", "style.css");
         localStorage.setItem("selectedTheme", "style.css");
-        image.setAttribute("src", "image_ran_shinichi.png");
-        localStorage.setItem("selectedImage", "image_ran_shinichi.png");
+        image.setAttribute("src", "");
+        localStorage.setItem("selectedImage", "");
     }
 }
 
