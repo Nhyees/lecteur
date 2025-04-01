@@ -194,6 +194,7 @@ video {
 
 .floating-image {
     display: none;
+    transition: 0.3s;
 }
 
 .back-button {

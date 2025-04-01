@@ -230,6 +230,7 @@ video {
     width: clamp(150px, 16vw, 300px);
     height: auto;
     z-index: 9999;
+    transition: 0.3s;
 }
 
 .back-button {
