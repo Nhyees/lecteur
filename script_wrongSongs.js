@@ -278,22 +278,38 @@ function clearAllMusic() {
 
 function toggleTheme() {
     const themeLink = document.getElementById("theme-link");
+    const image = document.querySelector(".floating-image");
+    const currentTheme = themeLink.getAttribute("href");
 
-    if (themeLink.getAttribute("href") === "style.css") {
+    if (currentTheme === "style.css") {
         themeLink.setAttribute("href", "style_girly.css");
         localStorage.setItem("selectedTheme", "style_girly.css");
+        image.setAttribute("src", "image_ran_shinichi.png"); 
+        localStorage.setItem("selectedImage", "image_ran_shinichi.png");
+    } else if (currentTheme === "style_girly.css") {
+        themeLink.setAttribute("href", "style_orange.css");
+        localStorage.setItem("selectedTheme", "style_orange.css");
+        image.setAttribute("src", "image_makeine.png");
+        localStorage.setItem("selectedImage", "image_makeine.png");
     } else {
         themeLink.setAttribute("href", "style.css");
         localStorage.setItem("selectedTheme", "style.css");
+        image.setAttribute("src", "image_ran_shinichi.png");
+        localStorage.setItem("selectedImage", "image_ran_shinichi.png");
     }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
     const themeLink = document.getElementById("theme-link");
+    const image = document.querySelector(".floating-image");
     const savedTheme = localStorage.getItem("selectedTheme");
+    const savedImage = localStorage.getItem("selectedImage");
 
     if (savedTheme) {
         themeLink.setAttribute("href", savedTheme);
+    }
+    if (savedImage) {
+        image.setAttribute("src", savedImage);
     }
 });
 
