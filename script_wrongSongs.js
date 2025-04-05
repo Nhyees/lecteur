@@ -8,7 +8,7 @@ const musicList = document.getElementById("musicList");
 
 //--Charger les données----------
 function loadPlaylist() {
-    const savedPlaylist = localStorage.getItem("playlist");
+    const savedPlaylist = localStorage.getItem("playlist_wrongSongs");
     if (savedPlaylist) {
         musicData = JSON.parse(savedPlaylist);
     }
@@ -97,7 +97,7 @@ function handleFileUpload(event) {
                 const newMusicData = JSON.parse(e.target.result);
                 musicData = musicData.concat(newMusicData); // Ajoute les nouvelles chansons
 
-                localStorage.setItem("playlist", JSON.stringify(musicData));
+                localStorage.setItem("playlist_wrongSongs", JSON.stringify(musicData));
 
                 displayMusicList();
             } catch (error) {
@@ -125,7 +125,7 @@ function drop(event) {
         const movedItem = musicData.splice(fromIndex, 1)[0];
         musicData.splice(toIndex, 0, movedItem);
 
-        localStorage.setItem("playlist", JSON.stringify(musicData)); // Sauvegarde
+        localStorage.setItem("playlist_wrongSongs", JSON.stringify(musicData)); // Sauvegarde
         displayMusicList();
     }
 }
@@ -207,7 +207,7 @@ function deleteMusic(index) {
     const isCurrentPlaying = index === currentIndex;
 
     musicData.splice(index, 1);
-    localStorage.setItem("playlist", JSON.stringify(musicData)); // Sauvegarde
+    localStorage.setItem("playlist_wrongSongs", JSON.stringify(musicData)); // Sauvegarde
 
     if (musicData.length === 0) {
         currentIndex = 0;
@@ -241,7 +241,7 @@ videoPlayer.addEventListener("ended", function() {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    const savedPlaylist = localStorage.getItem("playlist");
+    const savedPlaylist = localStorage.getItem("playlist_wrongSongs");
     if (savedPlaylist) {
         musicData = JSON.parse(savedPlaylist);
         displayMusicList();
@@ -255,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
         clearButton.addEventListener("click", function() {
             // Supprimer toutes les musiques de la liste
             musicData = [];
-            localStorage.removeItem("playlist");
+            localStorage.removeItem("playlist_wrongSongs");
             clearAllMusic();
             displayMusicList(); // Mettre à jour l'affichage
         });
@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function clearAllMusic() {
-    const playlist = document.getElementById("playlist");
+    const playlist = document.getElementById("playlist_wrongSongs");
 
     if (playlist) {
         // Vider toutes les musiques dans la playlist
