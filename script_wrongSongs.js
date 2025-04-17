@@ -60,8 +60,8 @@ function displayMusicList() {
         musicItem.draggable = true;
         musicItem.dataset.index = index;
         musicItem.innerHTML = `
-            <h3>${music.songName} - ${music.artist}</h3>
-            <p><strong>Anime:</strong> ${music.animeJPName} | <strong>Type:</strong> ${music.type}</p>
+            <h3>${music.songName} - ${music.songArtist}</h3>
+            <p><strong>Anime:</strong> ${music.animeJPName} | <strong>Type:</strong> ${music.songType}</p>
         `;
 
         //--Bouton supprimer chaque élément-----------------------------------------------
@@ -138,7 +138,7 @@ function playMusic(index) {
     if (musicData.length === 0) return;
     currentIndex = index;
 
-    videoPlayer.src = musicData[currentIndex].video;
+    videoPlayer.src = musicData[currentIndex].HQ;
     audioPlayer.volume = savedVolume;
     videoPlayer.play();
     updateSongInfo();
@@ -150,9 +150,9 @@ function playMusic(index) {
 function updateSongInfo() {
     const song = musicData[currentIndex];
     document.getElementById("songName").textContent = song.songName;
-    document.getElementById("artistName").textContent = song.artist;
+    document.getElementById("artistName").textContent = song.songArtist;
     document.getElementById("animeName").textContent = song.animeJPName;
-    document.getElementById("typeName").textContent = song.type;
+    document.getElementById("typeName").textContent = song.songType;
 }
 
 function highlightCurrentSong() {
