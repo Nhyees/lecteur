@@ -2,6 +2,7 @@ let musicData = [];
 let currentIndex = 0;
 let savedVolume = 0.3;
 let isShuffle = false;
+let isRepeat = false;
 
 const audioPlayer = document.getElementById("audioPlayer");
 const musicList = document.getElementById("musicList");
@@ -190,7 +191,9 @@ document.getElementById("randomButton").addEventListener("click", function () {
 });
 
 audioPlayer.addEventListener("ended", function () {
-    if (isShuffle) {
+    if (isRepeat) {
+        playMusic(currentIndex);
+    } else if (isShuffle) {
         playRandomMusic();
     } else {
         playNext();
@@ -218,6 +221,21 @@ function playNext() {
         playMusic(currentIndex);
     }
 }
+
+document.getElementById("repeatButton").addEventListener("click", function () {
+    isRepeat = !isRepeat;
+    this.classList.toggle("active", isRepeat);
+});
+
+videoPlayer.addEventListener("ended", function () {
+    if (isRepeat) {
+        playMusic(currentIndex);
+    } else if (isShuffle) {
+        playRandomMusic();
+    } else {
+        playNext();
+    }
+});
 
 function deleteMusic(index) {
     const isCurrentPlaying = index === currentIndex;
@@ -251,10 +269,6 @@ function exportPlaylist() {
     link.click();
     URL.revokeObjectURL(url);
 }
-
-videoPlayer.addEventListener("ended", function() {
-    playNext();
-});
 
 document.addEventListener("DOMContentLoaded", function () {
     const savedPlaylist = localStorage.getItem("playlist");
