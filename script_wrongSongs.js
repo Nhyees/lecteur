@@ -7,6 +7,49 @@ let isRepeat = false;
 const audioPlayer = document.getElementById("audioPlayer");
 const musicList = document.getElementById("musicList");
 
+let lastPlayedHistory = [];
+
+function updateHistory(index) {
+    const song = musicData[index];
+    if (!song) return;
+
+    const newEntry = {
+        anime: song.animeJPName,
+        title: song.songName,
+        artist: song.songArtist
+    };
+
+    // Supprime si déjà présent (évite les doublons consécutifs)
+    lastPlayedHistory = lastPlayedHistory.filter(item =>
+        !(item.anime === newEntry.anime && item.title === newEntry.title && item.artist === newEntry.artist)
+    );
+
+    // Ajoute au début
+    lastPlayedHistory.unshift(newEntry);
+
+    // Limite à 4 éléments
+    if (lastPlayedHistory.length > 4) {
+        lastPlayedHistory.pop();
+    }
+
+    displayHistory();
+}
+
+function displayHistory() {
+    const historyContainer = document.getElementById("historyContainer");
+    if (!historyContainer) return;
+
+    historyContainer.innerHTML = "<h3>🎵 Historique</h3>";
+    lastPlayedHistory.forEach(entry => {
+        const div = document.createElement("div");
+        div.classList.add("history-item");
+        div.innerHTML = `
+            <p><strong>${entry.title}</strong> - ${entry.artist}<br><em>${entry.anime}</em></p>
+        `;
+        historyContainer.appendChild(div);
+    });
+}
+
 //--Charger les données----------
 function loadPlaylist() {
     const savedPlaylist = localStorage.getItem("playlist_wrongSongs");
@@ -137,11 +180,17 @@ const videoPlayer = document.getElementById("videoPlayer");
 
 function playMusic(index) {
     if (musicData.length === 0) return;
+
+    if (currentIndex !== null && currentIndex !== undefined && musicData[currentIndex]) {
+        updateHistory(currentIndex);
+    }
+
     currentIndex = index;
 
     videoPlayer.src = musicData[currentIndex].HQ;
     audioPlayer.volume = savedVolume;
     videoPlayer.play();
+
     updateSongInfo();
     highlightCurrentSong();
 
@@ -397,4 +446,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     toggleButton.addEventListener("click", toggleGame);
+
+    const toggleBtn = document.getElementById("toggle-history");
+    const historyBox = document.getElementById("history-box");
+
+    if (toggleBtn && historyBox) {
+    toggleBtn.addEventListener("click", () => {
+        const isVisible = historyBox.style.display === "block";
+        historyBox.style.display = isVisible ? "none" : "block";
+    });
+    }
+    s
 });
