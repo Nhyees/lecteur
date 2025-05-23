@@ -19,7 +19,7 @@ function updateHistory(index) {
         artist: song.songArtist
     };
 
-
+    // Supprime si déjà présent (évite les doublons consécutifs)
     lastPlayedHistory = lastPlayedHistory.filter(item =>
         !(item.anime === newEntry.anime && item.title === newEntry.title && item.artist === newEntry.artist)
     );
