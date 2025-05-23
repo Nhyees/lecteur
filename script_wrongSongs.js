@@ -44,7 +44,7 @@ function displayHistory() {
         const div = document.createElement("div");
         div.classList.add("history-item");
         div.innerHTML = `
-            <p><strong>${entry.title}</strong> - ${entry.artist}<br><em>${entry.anime}</em></p>
+            <p><strong>${entry.anime}</strong><br> <em>${entry.title} - ${entry.artist}</em></p>
         `;
         historyContainer.appendChild(div);
     });
